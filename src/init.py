@@ -99,13 +99,13 @@ def create_stimulus(info):
 		sys.exit()
 	if (info[color] == True):
 		if (info[ft_0] == True): ft_0_color = np.inf
-		else: ft_0_color = False
+		else: ft_0_color = 1
 		env_color = mc.envelope_color(fx, fy, ft, alpha=info[alpha], ft_0=ft_0_color)
 	if (info[orientation] == True):
 		env_orientation = mc.envelope_orientation(fx, fy, ft, theta=info[theta], B_theta=info[B_theta])
 	if (info[radial] == True):
 		if (info[ft_0b] == True): ft_0_radial = np.inf
-		else: ft_0_radial = False
+		else: ft_0_radial = 1
 		env_radial = mc.envelope_radial(fx, fy, ft, sf_0=info[sf_0], ft_0=ft_0_radial, loggabor=info[loggabor])
 	if (info[speed] == True):
 		env_speed = mc.envelope_speed(fx, fy, ft, V_X=info[V_X], V_Y=info[V_Y], B_V=info[B_V])
