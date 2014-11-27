@@ -27,32 +27,25 @@ do_amp = 20
 threshold = 21
 isoluminance = 22
 
-def window_config():
-	height = 256
-	width = 256
-	frame = 32
-	color = True
-	alpha = mc.alpha
-	ft_0 = True
-	orientation = True
-	theta = mc.theta
-	B_theta = mc.B_theta
-	radial = True
-	sf_0 = mc.sf_0
-	ft_0b = True
-	loggabor = True
-	speed = True
-	V_X = mc.V_X
-	V_Y = mc.V_Y
-	B_V = mc.B_V
-	random_cloud = True
-	seed = None
-	impulse = False
-	do_amp = False
-	threshold = 1.e-3
-	isoluminance = True
+def window_config(lap, info=None):
+	if (lap == 'First'):
+		height, width, frame = 256, 256, 32
+		color, alpha, ft_0 = True, mc.alpha, True
+		orientation, theta, B_theta = True, mc.theta, mc.B_theta
+		radial, sf_0, ft_0b, loggabor = True, mc.sf_0, True, mc.loggabor
+		speed, V_X, V_Y, B_V = True, mc.V_X, mc.V_Y, mc.B_V
+		random_cloud, seed, impulse, do_amp, threshold = True, None, False, False, 1.e-3
+		isoluminance = False
+	else:
+		height, width, frame = info[0], info[1], info[2]
+		color, alpha, ft_0 = info[3], info[4], info[5]
+		orientation, theta, B_theta = info[6], info[7], info[8]
+		radial, sf_0, ft_0b, loggabor = info[9], info[10], info[11], info[12]
+		speed, V_X, V_Y, B_V = info[13], info[14], info[15], info[16]
+		random_cloud, seed, impulse, do_amp, threshold = info[17], info[18], info[19], info[20], info[21]
+		isoluminance = info[22]
 	myDlg = classdlg.Dlg(title="MotionClouds-demo")
-	myDlg.addText('envelope_gabor = color * orientation * radial * speed')
+	myDlg.addText('esc to quit the programm')
 	myDlg.addText('height, width and frame need to be pair and > 2')
 	myDlg.addField('height', height)
 	myDlg.addField('width', width)
@@ -101,7 +94,7 @@ def control(info):
 		sys.exit()
 
 
-def create_stimulus(info):
+def create_stimulus(info, return_env=False):
 	control(info)
 
 	import numpy as np
@@ -134,6 +127,10 @@ def create_stimulus(info):
 
 	env = mc.rectif(env, contrast=1.)
 	env = env * 255
+
+	if (return_env == True):
+		return (env)
+
 	stimulus = np.zeros([info[height], info[width], info[frame], 3]).astype(int)
 
 	if (info[isoluminance] == True):

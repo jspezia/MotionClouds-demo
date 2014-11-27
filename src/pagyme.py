@@ -13,7 +13,7 @@ def quit(event):
         _continue = False
     if _continue == False:
         pygame.quit()
-        sys.exit()
+        #sys.exit()
     return(_continue)
 
 def show_stimulus(stimulus, name='toto', resizable=True):
