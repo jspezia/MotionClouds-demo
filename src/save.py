@@ -84,9 +84,8 @@ def fileSaveDlg(initFilePath="", initFileName="",
 
 
 def movie(info, info2):
-	info3 = info
-	info3[0], info3[1], info3[2] = info2[0], info2[1], info2[2]
-	stimulus = init.create_stimulus(info3)
+	info[0], info[1], info[2] = info2[0], info2[1], info2[2]
+	stimulus = init.create_stimulus(info)
 	filename = fileSaveDlg()
 	if (info2[3] == True): saveMovie(stimulus, filename, vext='.webm')
 	if (info2[4] == True): saveMovie(stimulus, filename, vext='.gif')
@@ -123,5 +122,5 @@ def window_save(lap, info=None):
 	if (myDlg.OK):
 		info = myDlg.data
 		saveMC = True
-	control2(info)
+		control2(info)
 	return(info, saveMC)
