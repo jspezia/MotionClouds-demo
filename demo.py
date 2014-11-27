@@ -15,3 +15,4 @@ while (True):
 	else: info2, saveMC = save.window_save(lap, info=info2)
 	if (saveMC):
 		save.movie(info, info2)
+		info[0], info[1], info[2] = 256, 256, 32
