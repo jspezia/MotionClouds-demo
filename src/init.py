@@ -53,6 +53,7 @@ def window_config():
 	isoluminance = True
 	myDlg = classdlg.Dlg(title="MotionClouds-demo")
 	myDlg.addText('envelope_gabor = color * orientation * radial * speed')
+	myDlg.addText('height, width and frame need to be pair and > 2')
 	myDlg.addField('height', height)
 	myDlg.addField('width', width)
 	myDlg.addField('frame', frame)
@@ -85,18 +86,32 @@ def window_config():
 		sys.exit()
 	return(info)
 
+
+def control(info):
+	ok = True
+	if (info[color] + info[orientation] + info[radial] + info[speed] == 0):
+		ok = False
+	if (info[height] < 2 or info[width] < 2 or info[frame] < 2):
+		ok = False
+	if (info[height] % 2 != 0 or info[width] % 2 != 0 or info[frame] % 2 != 0):
+		ok = False
+	if (ok != True):
+		import sys
+		print 'very funny...'
+		sys.exit()
+
+
 def create_stimulus(info):
+	control(info)
+
 	import numpy as np
+
 	fx, fy, ft = mc.get_grids(info[height], info[width], info[frame])
 
 	env_color = 1
 	env_orientation = 1
 	env_radial = 1
 	env_speed = 1
-	if (info[color] + info[orientation] + info[radial] + info[speed] == 0):
-		import sys
-		print 'very funny...'
-		sys.exit()
 	if (info[color] == True):
 		if (info[ft_0] == True): ft_0_color = np.inf
 		else: ft_0_color = 1
