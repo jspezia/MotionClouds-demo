@@ -79,7 +79,7 @@ def window_config(lap, info=None):
 		import sys
 		print 'user cancelled'
 		sys.exit()
-	if (info[23]): window_config('First')
+	if (info[23]): info = window_config('First')
 	return(info)
 
 
