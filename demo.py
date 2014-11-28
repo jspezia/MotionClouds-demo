@@ -12,7 +12,7 @@ while (True):
 	if (lap == 'Second'):
 		info2, saveMC = save.window_save(lap)
 		if (saveMC): lap = 'end_init'
-	if (lap != 'First' and lap != 'Second'):
+	elif (lap != 'First'):
 		if (info2[7] == False):
 			info2, saveMC = save.window_save(lap, info=info2)
 		if (info2[7] == True): saveMC = False
