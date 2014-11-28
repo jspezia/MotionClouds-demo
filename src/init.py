@@ -35,7 +35,7 @@ def window_config(lap, info=None):
 		radial, sf_0, ft_0b, loggabor = True, mc.sf_0, True, mc.loggabor
 		speed, V_X, V_Y, B_V = True, mc.V_X, mc.V_Y, mc.B_V
 		random_cloud, seed, impulse, do_amp, threshold = True, None, False, False, 1.e-3
-		isoluminance = False
+		isoluminance, reset = False, False
 	else:
 		height, width, frame = info[0], info[1], info[2]
 		color, alpha, ft_0 = info[3], info[4], info[5]
@@ -43,7 +43,7 @@ def window_config(lap, info=None):
 		radial, sf_0, ft_0b, loggabor = info[9], info[10], info[11], info[12]
 		speed, V_X, V_Y, B_V = info[13], info[14], info[15], info[16]
 		random_cloud, seed, impulse, do_amp, threshold = info[17], info[18], info[19], info[20], info[21]
-		isoluminance = info[22]
+		isoluminance, reset = info[22], False
 	myDlg = classdlg.Dlg(title="MotionClouds-demo")
 	myDlg.addText('esc to quit the programm')
 	myDlg.addText('height, width and frame need to be pair and > 2')
@@ -70,6 +70,8 @@ def window_config(lap, info=None):
 	myDlg.addField('do_amp', do_amp)
 	myDlg.addField('threshold', threshold)
 	myDlg.addField('isoluminance', isoluminance)
+	myDlg.addText('')
+	myDlg.addField('reset parameters?', reset)
 	myDlg.show()
 	if (myDlg.OK):
 		info = myDlg.data
@@ -77,6 +79,7 @@ def window_config(lap, info=None):
 		import sys
 		print 'user cancelled'
 		sys.exit()
+	if (info[23]): window_config('First')
 	return(info)
 
 

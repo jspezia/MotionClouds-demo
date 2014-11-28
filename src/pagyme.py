@@ -9,8 +9,8 @@ def quit(event):
     _continue = True
     if event.type == QUIT:
         _continue = False
-    if (event.type == KEYDOWN) and (event.key == K_ESCAPE):
-        _continue = False
+    if (event.type == KEYDOWN) and (event.key == K_ESCAPE): _continue = False
+    if (event.type == KEYDOWN) and (event.key == K_RETURN): _continue = False
     if _continue == False:
         pygame.quit()
         #sys.exit()
