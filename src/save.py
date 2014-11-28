@@ -82,13 +82,19 @@ def fileSaveDlg(initFilePath="", initFileName="",
     else: fullPath = None
     return fullPath
 
-
 def movie(info, info2):
 	info[0], info[1], info[2] = info2[0], info2[1], info2[2]
 	stimulus = init.create_stimulus(info)
 	filename = fileSaveDlg()
+	if (filename == None): return
 	if (info2[3] == True): saveMovie(stimulus, filename, vext='.webm')
 	if (info2[4] == True): saveMovie(stimulus, filename, vext='.gif')
+	if (info2[5] == True):
+		import numpy as np
+		np.save(filename, stimulus)
+	if (info2[6] == True):
+		from scipy.io import savemat
+		savemat((filename + '.mat'), {'stimulus':stimulus})
 
 def control2(info):
 	ok = True
@@ -105,10 +111,12 @@ def window_save(lap, info=None):
 	saveMC = False
 	if (lap == 'Second'):
 		height, width, frame = 512, 512, 128
-		webm, gif = True, False
+		webm, gif, npy, mat = True, False, False, False
+		not_save = False
 	else:
 		height, width, frame = info[0], info[1], info[2]
-		webm, gif = info[3], info[4]
+		webm, gif, npy, mat = info[3], info[4], info[5], info[6]
+		not_save = info[7]
 	myDlg = classdlg.Dlg(title="Would you like to save the last MotionCloud?")
 	myDlg.addText('escap to cancel')
 	myDlg.addText('new parameters')
@@ -118,6 +126,12 @@ def window_save(lap, info=None):
 	myDlg.addText('format video:')
 	myDlg.addField('.webm', webm)
 	myDlg.addField('.gif', gif)
+	myDlg.addField('.npy', npy)
+	myDlg.addField('.mat', mat)
+	myDlg.addText('')
+	myDlg.addText('')
+	myDlg.addText('Do you want to use only the viewer?')
+	myDlg.addField('don\'t show backup window again:', not_save)
 	myDlg.show()
 	if (myDlg.OK):
 		info = myDlg.data

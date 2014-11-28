@@ -12,7 +12,10 @@ while (True):
 	if (lap == 'Second'):
 		info2, saveMC = save.window_save(lap)
 		if (saveMC): lap = 'end_init'
-	else: info2, saveMC = save.window_save(lap, info=info2)
+	if (lap != 'First' and lap != 'Second'):
+		if (info2[7] == False):
+			info2, saveMC = save.window_save(lap, info=info2)
+		if (info2[7] == True): saveMC = False
 	if (saveMC):
 		save.movie(info, info2)
 		info[0], info[1], info[2] = 256, 256, 32
