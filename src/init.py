@@ -14,17 +14,17 @@ theta = 7
 B_theta = 8
 radial = 9
 sf_0 = 10
-ft_0b = 11
-loggabor = 12
-speed = 13
-V_X = 14
-V_Y = 15
-B_V = 16
-random_cloud = 17
-seed = 18
-impulse = 19
-do_amp = 20
-threshold = 21
+B_sf = 11
+ft_0b = 12
+loggabor = 13
+speed = 14
+V_X = 15
+V_Y = 16
+B_V = 17
+random_cloud = 18
+seed = 19
+impulse = 20
+do_amp = 21
 isoluminance = 22
 
 def window_config(lap, info=None):
@@ -32,17 +32,17 @@ def window_config(lap, info=None):
 		height, width, frame = 256, 256, 32
 		color, alpha, ft_0 = True, mc.alpha, True
 		orientation, theta, B_theta = True, mc.theta, mc.B_theta
-		radial, sf_0, ft_0b, loggabor = True, mc.sf_0, True, mc.loggabor
+		radial, sf_0, B_sf, ft_0b, loggabor = True, mc.sf_0, mc.B_sf, True, mc.loggabor
 		speed, V_X, V_Y, B_V = True, mc.V_X, mc.V_Y, mc.B_V
-		random_cloud, seed, impulse, do_amp, threshold = True, None, False, False, 1.e-3
+		random_cloud, seed, impulse, do_amp= True, None, False, False
 		isoluminance, reset = False, False
 	else:
 		height, width, frame = info[0], info[1], info[2]
 		color, alpha, ft_0 = info[3], info[4], info[5]
 		orientation, theta, B_theta = info[6], info[7], info[8]
-		radial, sf_0, ft_0b, loggabor = info[9], info[10], info[11], info[12]
-		speed, V_X, V_Y, B_V = info[13], info[14], info[15], info[16]
-		random_cloud, seed, impulse, do_amp, threshold = info[17], info[18], info[19], info[20], info[21]
+		radial, sf_0, B_sf, ft_0b, loggabor = info[9], info[10], info[11], info[12], info[13]
+		speed, V_X, V_Y, B_V = info[14], info[15], info[16], info[17]
+		random_cloud, seed, impulse, do_amp = info[18], info[19], info[20], info[21]
 		isoluminance, reset = info[22], False
 	myDlg = classdlg.Dlg(title="MotionClouds-demo")
 	myDlg.addText('esc to quit the programm')
@@ -51,24 +51,24 @@ def window_config(lap, info=None):
 	myDlg.addField('width', width)
 	myDlg.addField('frame', frame)
 	myDlg.addField('envelope_color', color)
-	myDlg.addField('alpha', alpha)
-	myDlg.addField('ft_0', ft_0)
-	myDlg.addField('envelope_orientation', orientation)
-	myDlg.addField('theta', theta)
-	myDlg.addField('B_theta', B_theta)
-	myDlg.addField('envelope_radial', radial)
-	myDlg.addField('sf_0', sf_0)
-	myDlg.addField('ft_0b', ft_0b)
-	myDlg.addField('loggabor', loggabor)
-	myDlg.addField('envelope_speed', speed)
-	myDlg.addField('V_X', V_X)
-	myDlg.addField('V_Y', V_Y)
-	myDlg.addField('B_V', B_V)
-	myDlg.addField('random_cloud', random_cloud)
-	myDlg.addField('seed', seed)
-	myDlg.addField('impulse', impulse)
-	myDlg.addField('do_amp', do_amp)
-	myDlg.addField('threshold', threshold)
+	myDlg.addField('alpha (0 = white, 1 = pink, 2 = red)', alpha)
+	myDlg.addField('ft_0 (spatiotemporal scaling factor)', ft_0)
+	myDlg.addField('envelope_orientation (von-Mises distribution)', orientation)
+	myDlg.addField('theta (orientation of the Gabor kernel)', theta)
+	myDlg.addField('B_theta (orientation bandwidth)', B_theta)
+	myDlg.addField('envelope_radial (sf = spacial frequency)', radial)
+	myDlg.addField('sf_0 (sf relative to the sampling frequency)', sf_0)
+	myDlg.addField('B_sf (sf bandwidth)', B_sf)
+	myDlg.addField('ft_0', ft_0b)
+	myDlg.addField('loggabor (log-Gabor kernel or traditional gabor)', loggabor)
+	myDlg.addField('envelope_speed (V_X=1 == displacement of 1/height)', speed)
+	myDlg.addField('V_X (> 0 is downward)', V_X)
+	myDlg.addField('V_Y (> 0 is rightward)', V_Y)
+	myDlg.addField('B_V (speed bandwidth)', B_V)
+	myDlg.addField('random_cloud (create a random phase spectrum)', random_cloud)
+	myDlg.addField('use a specific seed to specify the RNG\'s seed', seed)
+	myDlg.addField('test the impulse response of the kernel', impulse)
+	myDlg.addField('test the effect of randomizing amplitudes', do_amp)
 	myDlg.addField('isoluminance', isoluminance)
 	myDlg.addText('')
 	myDlg.addField('reset parameters?', reset)
@@ -117,23 +117,19 @@ def create_stimulus(info, return_env=False):
 	if (info[radial] == True):
 		if (info[ft_0b] == True): ft_0_radial = np.inf
 		else: ft_0_radial = 1
-		env_radial = mc.envelope_radial(fx, fy, ft, sf_0=info[sf_0], ft_0=ft_0_radial, loggabor=info[loggabor])
+		env_radial = mc.envelope_radial(fx, fy, ft, sf_0=info[sf_0], B_sf=info[B_sf], ft_0=ft_0_radial, loggabor=info[loggabor])
 	if (info[speed] == True):
 		env_speed = mc.envelope_speed(fx, fy, ft, V_X=info[V_X], V_Y=info[V_Y], B_V=info[B_V])
 
 	env = env_color * env_orientation * env_radial * env_speed
-
 	if (info[random_cloud] == True):
 		if (info[seed] == 'None'): seed_t = None
 		else: seed_t = int(info[seed])
-		env = mc.random_cloud(env, seed=seed_t, impulse=info[impulse], do_amp=info[do_amp], threshold=info[threshold])
-
+		env = mc.random_cloud(env, seed=seed_t, impulse=info[impulse], do_amp=info[do_amp])
 	env = mc.rectif(env, contrast=1.)
 	env = env * 255
-
 	if (return_env == True):
 		return (env)
-
 	stimulus = np.zeros([info[height], info[width], info[frame], 3]).astype(int)
 
 	if (info[isoluminance] == True):

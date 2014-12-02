@@ -1,1 +1,1 @@
-import init, pagyme, save
+import init, pagyme, save, classdlg

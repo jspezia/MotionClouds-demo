@@ -6,7 +6,6 @@
 
 import wx
 import numpy
-import string, os
 
 class Dlg(wx.Dialog):
     """A simple dialogue box. You can add text or input boxes
@@ -33,7 +32,7 @@ class Dlg(wx.Dialog):
         self.labelButtonOK = labelButtonOK
         self.labelButtonCancel = labelButtonCancel
     def addText(self, text, color=''):
-        textLength = wx.Size(8*len(text)+16, 25)
+        textLength = wx.Size(8*len(text), 25)
         myTxt = wx.StaticText(self, -1, label=text,
                                 style=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL,
                                 size=textLength)
@@ -46,7 +45,7 @@ class Dlg(wx.Dialog):
         if type(initial)==numpy.ndarray:
             initial=initial.tolist()
         container=wx.GridSizer(cols=2, hgap=10)
-        labelLength = wx.Size(9*len(label)+16, 25)
+        labelLength = wx.Size(9*len(label), 25)
         inputLabel = wx.StaticText(self, -1, label,
                                         size=labelLength,
                                         style=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)

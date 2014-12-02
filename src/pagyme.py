@@ -3,7 +3,6 @@
 import pygame
 from pygame.locals import *
 from pygame import surfarray
-import sys
 
 def quit(event):
     _continue = True
@@ -13,7 +12,6 @@ def quit(event):
     if (event.type == KEYDOWN) and (event.key == K_RETURN): _continue = False
     if _continue == False:
         pygame.quit()
-        #sys.exit()
     return(_continue)
 
 def show_stimulus(stimulus, name='toto', resizable=True):
